@@ -39,7 +39,7 @@ export default {
         familyId: 12
       }
     });
-    this.plates = res.data.data.allPlates;
+    this.plates = res.data.data.familyPlates;
   },
   methods: {
     async getPlates() {

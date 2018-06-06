@@ -28,14 +28,18 @@ export default {
   created: async function() {
     log("getting plates, load");
     const res = await axios.post("http://localhost:4000/api", {
-      query: `{ 
-          allPlates{
+      query: `
+       query GetPlatesForFamily($familyId: Int!) {   
+          familyPlates (familyId: $familyId){
             name
             abbreviation
-        }}`
+            familyId
+        }}`,
+      variables: {
+        familyId: 12
+      }
     });
-  this.plates = res.data.data.allPlates;
-    log( res.data.data.allPlates);
+    this.plates = res.data.data.allPlates;
   },
   methods: {
     async getPlates() {

@@ -16,25 +16,42 @@ const _connect = (cb) => {
             _log("Connected successfully to server");
 
             const db = client.db(dbName);
-           return cb(db);
+            return cb(db);
         });
 }
 
-const  getAllPlates =  (f, callback) => {
+const getAllPlates = (f, callback) => {
     _log("getting all plates")
 
     _connect((db) => {
         const _col = db.collection("plates");
-        _col.find({}).toArray((err, plates) => {
-            return callback(err, plates);
-        })
+        _col
+            .find({})
+            .toArray((err, plates) => {
+                return callback(err, plates);
+            })
     })
 }
 
-// const getFamilyPlates = (familyId) => plates.map(m => {     m.familyId =
-// familyId;     return m; })
+const getAllPlatesAsPromise = (familyId) => {
+    return new Promise((resolve, reject) => {
+        _log("here")
+        getAllPlates(familyId, (err, plates) => {
+            _log({err, plates})
+            if (err) 
+                reject();
+            else {
+
+                resolve(plates.map(m => {
+                    m.familyId = familyId;
+                    return m;
+                }));
+            }
+        })
+    });
+}
 
 module.exports = {
     getAllPlates,
-    getFamilyPlates: getAllPlates
+    getFamilyPlates: getAllPlatesAsPromise
 }

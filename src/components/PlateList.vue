@@ -1,10 +1,16 @@
 <template>
   <div>
     <div> 
-      Welcome Dewishes!
+      Welcome {{currentFamily.name}}!
     </div>   
+    <div>
+      
+  Select your family:<select v-model="currentFamily">
+  <option v-for="fam in families" v-bind:key="fam._id" v-bind:value="fam">{{fam.name}}</option>
+</select>
+    </div>
     <ul>
-      <li v-for="plate in plates" v-bind:key="plate.name">
+      <li v-for="plate in plates" v-bind:key="plate.name" @click="markAsDone(plate)" class="plate">
         {{plate.name}}
       </li>
     </ul>
@@ -22,12 +28,15 @@ export default {
   props: {},
   data() {
     return {
-      plates: []
+      plates: [],
+      families: [],
+      selected: "",
+      currentFamily: {}
     };
   },
   created: async function() {
     log("getting plates, load");
-    const res = await axios.post("http://localhost:4000/api", {
+    const platesRequest = await axios.post("http://localhost:4000/api", {
       query: `
        query GetPlatesForFamily($familyId: Int!) {   
           familyPlates (familyId: $familyId){
@@ -39,11 +48,23 @@ export default {
         familyId: 12
       }
     });
-    this.plates = res.data.data.familyPlates;
+    this.plates = platesRequest.data.data.familyPlates;
+    const fams = await axios.post("http://localhost:4000/api", {
+      query: `{
+          allFamilies{
+            name
+            _id
+        }}`
+    });
+    console.log({ fams });
+    this.families = fams.data.data.allFamilies;
   },
   methods: {
     async getPlates() {
       log("getting plates, click");
+    },
+    async markAsDone(plate) {
+      log({ msg: "marking plate as done", plate, name: plate.name });
     }
   }
 };
@@ -64,5 +85,7 @@ li {
   display: inline-block;
   margin: 0 10px;
   color: #42b983;
+  height: 10em;
+  border: 1px solid green;
 }
 </style>

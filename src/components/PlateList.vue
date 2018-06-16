@@ -5,7 +5,7 @@
     </div>   
     <div>
       
-  Select your family:<select v-model="currentFamily">
+  Select your family:<select v-model="currentFamily" @change="getPlates()">
   <option v-for="fam in families" v-bind:key="fam._id" v-bind:value="fam">{{fam.name}}</option>
 </select>
     </div>
@@ -35,20 +35,8 @@ export default {
     };
   },
   created: async function() {
-    log("getting plates, load");
-    const platesRequest = await axios.post("http://localhost:4000/api", {
-      query: `
-       query GetPlatesForFamily($familyId: Int!) {   
-          familyPlates (familyId: $familyId){
-            name
-            abbreviation
-            familyId
-        }}`,
-      variables: {
-        familyId: 12
-      }
-    });
-    this.plates = platesRequest.data.data.familyPlates;
+    log("compotnent created");
+
     const fams = await axios.post("http://localhost:4000/api", {
       query: `{
           allFamilies{
@@ -60,8 +48,21 @@ export default {
     this.families = fams.data.data.allFamilies;
   },
   methods: {
-    async getPlates() {
-      log("getting plates, click");
+    async getPlates(evt) {
+      log({ msg: "getting plates, on change", evt });
+      const platesRequest = await axios.post("http://localhost:4000/api", {
+        query: `
+       query GetPlatesForFamily($familyId: String!) {   
+          familyPlates (familyId: $familyId){
+            name
+            abbreviation
+            familyId
+        }}`,
+        variables: {
+          familyId: this.currentFamily._id
+        }
+      });
+      this.plates = platesRequest.data.data.familyPlates;
     },
     async markAsDone(plate) {
       log({ msg: "marking plate as done", plate, name: plate.name });

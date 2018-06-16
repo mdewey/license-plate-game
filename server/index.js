@@ -11,13 +11,13 @@ const schema = buildSchema(`
     ping: String
     allPlates: [Plate]
     allFamilies: [Family]
-    familyPlates(familyId: Int!): [Plate]
+    familyPlates(familyId: String!): [Plate]
   }
 
   type Plate {
       name: String, 
       abbreviation: String
-      familyId: Int
+      familyId: String
   }
 
   type Family{

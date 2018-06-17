@@ -45,17 +45,28 @@ const markPlateForFamilyAsPromise = (familyId, plateId) => {
         _log({msg: "mark plate as done: ", familyId, plateId});
 
         _connect((db) => {
-            const _filter = {familyId, plateId};
-            const _update = {familyId, plateId, timeFound: new Date()};
-            const _options = {upsert: true };
+            const _filter = {
+                familyId,
+                plateId
+            };
+            const _update = {
+                familyId,
+                plateId,
+                timeFound: new Date()
+            };
+            const _options = {
+                upsert: true
+            };
             const _callback = (err, doc) => {
-                return resolve();
-            }
-
+                if (err) {
+                    return reject(err);
+                } else 
+                    return resolve(doc);
+                }
+            
             const _col = db.collection("platesCollected");
-            _col
-                .update(_filter, _update, _options, _callback)
-               
+            _col.update(_filter, _update, _options, _callback)
+
         })
     })
 }

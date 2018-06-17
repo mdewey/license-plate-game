@@ -14,10 +14,21 @@ const schema = buildSchema(`
     familyPlates(familyId: String!): [Plate]
   }
 
+  
+  type Mutation {
+    markPlateSelected(plateId: String!, familyId: String): PlateViewModel
+  }
+
+  type PlateViewModel{
+      plateId: String
+      familyId: String
+  }
+
   type Plate {
       name: String, 
-      abbreviation: String
-      familyId: String
+      abbreviation: String,
+      familyId: String,
+      _id: String
   }
 
   type Family{
@@ -30,7 +41,8 @@ const rootValue = {
     ping: () => 'ponged at ' + new Date(),
     allPlates: () => plates.getAllPlates(),
     familyPlates: (req) => plates.getFamilyPlates(req.familyId),
-    allFamilies: ()  => families.getFamilies()
+    allFamilies: ()  => families.getFamilies(),
+    markPlateSelected: (req) => families.markPlateForFamily(req.familyId, req.plateId)
 }
 
 const app = express()

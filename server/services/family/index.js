@@ -40,6 +40,28 @@ const getAllFamiliesAsPromise = () => {
     });
 }
 
+const markPlateForFamilyAsPromise = (familyId, plateId) => {
+    return new Promise((resolve, reject) => {
+        _log({msg: "mark plate as done: ", familyId, plateId});
+
+        _connect((db) => {
+            
+            const _col = db.collection("platesCollected");
+            _col
+                .find({})
+                .toArray((err, docs) => {
+                    if (err) 
+                        reject(err);
+                    else {
+                        resolve(docs);
+                    }
+                })
+        })
+        return resolve();
+    })
+}
+
 module.exports = {
-        getFamilies: getAllFamiliesAsPromise
+    getFamilies: getAllFamiliesAsPromise,
+    markPlateForFamily: markPlateForFamilyAsPromise
 }

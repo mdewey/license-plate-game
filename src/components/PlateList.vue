@@ -44,7 +44,6 @@ export default {
             _id
         }}`
     });
-    console.log({ fams });
     this.families = fams.data.data.allFamilies;
   },
   methods: {
@@ -57,6 +56,7 @@ export default {
             name
             abbreviation
             familyId
+            _id
         }}`,
         variables: {
           familyId: this.currentFamily._id
@@ -66,6 +66,19 @@ export default {
     },
     async markAsDone(plate) {
       log({ msg: "marking plate as done", plate, name: plate.name });
+      const platesRequest = await axios.post("http://localhost:4000/api", {
+        query: `
+       mutation MarkPlateForFamily($familyId: String!, $plateId: String!) {   
+          markPlateSelected(familyId: $familyId, plateId: $plateId){
+          familyId
+          plateId
+        }}`,
+        variables: {
+          familyId: this.currentFamily._id, 
+          plateId: plate._id
+        }
+      });
+      console.log(platesRequest.data);
     }
   }
 };

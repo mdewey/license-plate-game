@@ -4,10 +4,13 @@
       Welcome {{currentFamily.name}}!
     </div>   
     <div>
-      
-  Select your family:<select v-model="currentFamily" @change="getPlates()">
-  <option v-for="fam in families" v-bind:key="fam._id" v-bind:value="fam">{{fam.name}}</option>
-</select>
+      Select your family:
+        <select v-model="currentFamily" @change="getPlates()">
+          <option v-for="fam in families" v-bind:key="fam._id" v-bind:value="fam">{{fam.name}}</option> 
+        </select>
+        <div>
+          <input v-model="newFamily"> <button @click="addFamily()">+</button>
+        </div>
     </div>
     <ul>
       <li 
@@ -28,7 +31,7 @@
 import axios from "axios";
 // eslint-disable-next-line
 const log = msg => console.log(msg);
-
+const _url = "http://localhost:4000/api";
 export default {
   name: "PlateList",
   props: {},
@@ -37,13 +40,14 @@ export default {
       plates: [],
       families: [],
       selected: "",
-      currentFamily: {}
+      currentFamily: {},
+      newFamily:""
     };
   },
   created: async function() {
     log("compotnent created");
 
-    const fams = await axios.post("/api", {
+    const fams = await axios.post(_url, {
       query: `{
           allFamilies{
             name
@@ -53,9 +57,25 @@ export default {
     this.families = fams.data.data.allFamilies;
   },
   methods: {
+    async addFamily(){
+
+      log({ msg: "marking plate as done", name: this.newFamily });
+     const res = await axios.post(_url, {
+        query: `
+       mutation CreateNewFamilty($newFamily: String!) {   
+          markPlateSelected(newFamily: $newFamily){
+          families
+        }}`,
+        variables: {
+          newFamily: this.newFamily
+        }
+      });
+      console.log(res.data);
+      this.families = res.data.data.families;
+    },
     async getPlates(evt) {
       log({ msg: "getting plates, on change", evt });
-      const platesRequest = await axios.post("/api", {
+      const platesRequest = await axios.post(_url, {
         query: `
        query GetPlatesForFamily($familyId: String!) {   
           familyPlates (familyId: $familyId){
@@ -73,7 +93,7 @@ export default {
     },
     async markAsDone(plate) {
       log({ msg: "marking plate as done", plate, name: plate.name });
-     await axios.post("/api", {
+     await axios.post(_url, {
         query: `
        mutation MarkPlateForFamily($familyId: String!, $plateId: String!) {   
           markPlateSelected(familyId: $familyId, plateId: $plateId){
@@ -109,7 +129,7 @@ li {
   height: 10em;
   border: 1px solid green;
 }
-.found{
+.found {
   border: 3px solid pink;
 }
 </style>

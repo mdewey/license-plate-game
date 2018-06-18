@@ -29,6 +29,7 @@ const schema = buildSchema(`
       abbreviation: String,
       familyId: String,
       _id: String
+      found: Boolean
   }
 
   type Family{

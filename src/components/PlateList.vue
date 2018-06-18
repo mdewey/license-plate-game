@@ -10,7 +10,13 @@
 </select>
     </div>
     <ul>
-      <li v-for="plate in plates" v-bind:key="plate.name" @click="markAsDone(plate)" class="plate">
+      <li 
+        v-for="plate in plates" 
+        v-bind:key="plate.name"
+        @click="markAsDone(plate)" 
+        v-bind:class="{ found: plate.found }"
+        class="plate" >
+        <div ></div>
         {{plate.name}}
       </li>
     </ul>
@@ -57,6 +63,7 @@ export default {
             abbreviation
             familyId
             _id
+            found
         }}`,
         variables: {
           familyId: this.currentFamily._id
@@ -66,7 +73,7 @@ export default {
     },
     async markAsDone(plate) {
       log({ msg: "marking plate as done", plate, name: plate.name });
-      const platesRequest = await axios.post("http://localhost:4000/api", {
+      await axios.post("http://localhost:4000/api", {
         query: `
        mutation MarkPlateForFamily($familyId: String!, $plateId: String!) {   
           markPlateSelected(familyId: $familyId, plateId: $plateId){
@@ -78,7 +85,6 @@ export default {
           plateId: plate._id
         }
       });
-      console.log(platesRequest.data);
     }
   }
 };
@@ -101,5 +107,8 @@ li {
   color: #42b983;
   height: 10em;
   border: 1px solid green;
+}
+.found{
+  border: 3px solid pink;
 }
 </style>

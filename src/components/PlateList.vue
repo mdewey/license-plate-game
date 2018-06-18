@@ -73,7 +73,7 @@ export default {
     },
     async markAsDone(plate) {
       log({ msg: "marking plate as done", plate, name: plate.name });
-      await axios.post("http://localhost:4000/api", {
+     await axios.post("http://localhost:4000/api", {
         query: `
        mutation MarkPlateForFamily($familyId: String!, $plateId: String!) {   
           markPlateSelected(familyId: $familyId, plateId: $plateId){
@@ -85,6 +85,7 @@ export default {
           plateId: plate._id
         }
       });
+      plate.found = new Date();
     }
   }
 };

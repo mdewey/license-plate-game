@@ -31,7 +31,7 @@
 import axios from "axios";
 // eslint-disable-next-line
 const log = msg => console.log(msg);
-const _url = "http://localhost:4000/api";
+const _url = process.env.NODE_ENV === 'production' ? "/api" : "http://localhost:4000/api";
 export default {
   name: "PlateList",
   props: {},

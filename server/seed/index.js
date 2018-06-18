@@ -1,10 +1,10 @@
 const MongoClient = require('mongodb').MongoClient;
 
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const config = require("../config");
+// Connection URL
+const url = "mongodb://heroku_wp6zm7ch:ov2mp4pre8kqnudpvkg7de0pcs@ds263520.mlab.com:63520/heroku_wp6zm7ch?authMode=scram-sha1";
 
-// Database Name
-const dbName = "license-plate-game";
 
 const plates = [
     {
@@ -194,7 +194,7 @@ MongoClient.connect(url, function (err, client) {
     _log({err});
     _log("Connected successfully to server");
 
-    const db = client.db(dbName);
+    const db = client.db();
 
     const platesCollection = db.collection('plates');
 

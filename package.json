@@ -12,7 +12,6 @@
     "lint": "vue-cli-service lint",
     "start": "node server",
     "watch-server": "nodemon server",
-    "heroku-prebuild":"npm run build"
   },
   "dependencies": {
     "async": "^2.6.1",

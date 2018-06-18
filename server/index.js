@@ -42,7 +42,7 @@ const rootValue = {
     ping: () => 'ponged at ' + new Date(),
     allPlates: () => plates.getAllPlates(),
     familyPlates: (req) => plates.getFamilyPlates(req.familyId),
-    allFamilies: ()  => families.getFamilies(),
+    allFamilies: () => families.getFamilies(),
     markPlateSelected: (req) => families.markPlateForFamily(req.familyId, req.plateId)
 }
 
@@ -51,4 +51,7 @@ app.use(cors())
 app.use('/api', graphqlHTTP({rootValue, schema, graphiql: true}))
 app.use('/', express.static('dist'))
 
-app.listen(4000, () => console.log('Listening on 4000')) // eslint-disable-line no-console
+const port = process.env.PORT || 4000;
+app.listen(port);
+
+app.listen(port, () => console.log('Listening on ' + port)) // eslint-disable-line no-console

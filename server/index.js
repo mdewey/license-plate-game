@@ -17,6 +17,7 @@ const schema = buildSchema(`
   
   type Mutation {
     markPlateSelected(plateId: String!, familyId: String): PlateViewModel
+    addFamily(name: String!) : [Family]
   }
 
   type PlateViewModel{
@@ -43,7 +44,8 @@ const rootValue = {
     allPlates: () => plates.getAllPlates(),
     familyPlates: (req) => plates.getFamilyPlates(req.familyId),
     allFamilies: () => families.getFamilies(),
-    markPlateSelected: (req) => families.markPlateForFamily(req.familyId, req.plateId)
+    markPlateSelected: (req) => families.markPlateForFamily(req.familyId, req.plateId),
+    addFamily: (req) => families.createFamily(req.name)
 }
 
 const app = express()

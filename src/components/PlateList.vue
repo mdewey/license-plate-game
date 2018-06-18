@@ -63,15 +63,16 @@ export default {
      const res = await axios.post(_url, {
         query: `
        mutation CreateNewFamilty($newFamily: String!) {   
-          markPlateSelected(newFamily: $newFamily){
-          families
+          addFamily(name: $newFamily){
+          name
+          _id
         }}`,
         variables: {
           newFamily: this.newFamily
         }
       });
       console.log(res.data);
-      this.families = res.data.data.families;
+      this.families = res.data.data.addFamily;
     },
     async getPlates(evt) {
       log({ msg: "getting plates, on change", evt });

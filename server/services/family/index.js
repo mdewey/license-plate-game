@@ -5,7 +5,6 @@ const config = require("../../config");
 // Connection URL
 const url = config.MONGO_DB;
 
-
 // Database Name
 const dbName = "license-plate-game";
 
@@ -74,7 +73,30 @@ const markPlateForFamilyAsPromise = (familyId, plateId) => {
     })
 }
 
+const createFamilyAsPromise = (name) => {
+    return new Promise((resolve, reject) => {
+
+        _log("getting all plates")
+
+        _connect((db) => {
+            const _col = db.collection("families");
+            _col
+                .insertOne({name}, (err) => {
+                    if (err) 
+                        reject(err);
+                    else {
+                        getAllFamiliesAsPromise().then(allFamilies => {
+                            resolve(allFamilies);
+                        })
+                    }
+                })
+        })
+    });
+}
+
 module.exports = {
     getFamilies: getAllFamiliesAsPromise,
-    markPlateForFamily: markPlateForFamilyAsPromise
+    markPlateForFamily: markPlateForFamilyAsPromise,
+    createFamily: createFamilyAsPromise
+
 }

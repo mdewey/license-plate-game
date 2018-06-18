@@ -10,7 +10,6 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "prestart": "yarn;yarn build",
     "start": "node server",
     "watch-server": "nodemon server",
     "heroku-prebuild":"npm run build"

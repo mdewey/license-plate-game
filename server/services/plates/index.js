@@ -1,7 +1,10 @@
 const MongoClient = require('mongodb').MongoClient;
 const async = require("async");
+
 // Connection URL
-const url = 'mongodb://localhost:27017';
+const config = require("../../config");
+// Connection URL
+const url = config.MONGO_DB;
 
 // Database Name
 const dbName = "license-plate-game";

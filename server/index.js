@@ -49,5 +49,6 @@ const rootValue = {
 const app = express()
 app.use(cors())
 app.use('/api', graphqlHTTP({rootValue, schema, graphiql: true}))
+app.use('/', express.static('dist'))
 
 app.listen(4000, () => console.log('Listening on 4000')) // eslint-disable-line no-console

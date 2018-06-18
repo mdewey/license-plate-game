@@ -43,7 +43,7 @@ export default {
   created: async function() {
     log("compotnent created");
 
-    const fams = await axios.post("http://localhost:4000/api", {
+    const fams = await axios.post("/api", {
       query: `{
           allFamilies{
             name
@@ -55,7 +55,7 @@ export default {
   methods: {
     async getPlates(evt) {
       log({ msg: "getting plates, on change", evt });
-      const platesRequest = await axios.post("http://localhost:4000/api", {
+      const platesRequest = await axios.post("/api", {
         query: `
        query GetPlatesForFamily($familyId: String!) {   
           familyPlates (familyId: $familyId){
@@ -73,7 +73,7 @@ export default {
     },
     async markAsDone(plate) {
       log({ msg: "marking plate as done", plate, name: plate.name });
-     await axios.post("http://localhost:4000/api", {
+     await axios.post("/api", {
         query: `
        mutation MarkPlateForFamily($familyId: String!, $plateId: String!) {   
           markPlateSelected(familyId: $familyId, plateId: $plateId){

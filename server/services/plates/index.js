@@ -7,7 +7,6 @@ const config = require("../../config");
 const url = config.MONGO_DB;
 
 // Database Name
-const dbName = "license-plate-game";
 
 const _log = (item) => console.log(item); // eslint-disable-line no-console
 
@@ -18,7 +17,7 @@ const _connect = (cb) => {
             _log({err});
             _log("Connected successfully to server");
 
-            const db = client.db(dbName);
+            const db = client.db();
             return cb(db);
         });
 }
